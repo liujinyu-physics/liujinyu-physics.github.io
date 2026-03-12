@@ -143,21 +143,51 @@ topological phases, and quantum transport.
 </a>
 
 </div>
-<section id="Publications">   
+    <section id="Publications">
 <h2>Publications</h2>
 
-<div id="scholar-list"></div>
+<div id="scholar-list">Loading publications...</div>
 
-<script src="https://unpkg.com/scholar.js"></script>
 <script>
-Scholar.load({
-    scholarID: "cLj6i8AAAAAJ",
-    target: "#scholar-list",
-    max: 100
-});
-</script>
-</section>
 
+const scholarID = "cLj6i8AAAAAJ";
+
+const url = "https://api.allorigins.win/raw?url=" +
+encodeURIComponent(
+"https://scholar.google.com/citations?user=" +
+scholarID +
+"&hl=en&view_op=list_works&sortby=pubdate&output=rss"
+);
+
+fetch(url)
+.then(response => response.text())
+.then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+.then(data => {
+
+let items = data.querySelectorAll("item");
+let html = "";
+
+items.forEach((el, i) => {
+
+if(i < 100){
+
+html += "<p>" + el.querySelector("title").textContent + "</p>";
+
+}
+
+});
+
+document.getElementById("scholar-list").innerHTML = html;
+
+})
+.catch(err => {
+document.getElementById("scholar-list").innerHTML =
+"Could not load publications.";
+});
+
+</script>
+
+</section>
    
 <section id="devices">
 
