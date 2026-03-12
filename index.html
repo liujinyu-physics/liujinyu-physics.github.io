@@ -143,59 +143,109 @@ topological phases, and quantum transport.
 </a>
 
 </div>
-    </section>
+   
 <section id="publications">
 
 <h2>Publications</h2>
 
 <p>
 <a href="https://scholar.google.com/citations?user=cLj6i8AAAAAJ" target="_blank">
-View full publication list on Google Scholar
+View full list on Google Scholar
 </a>
 </p>
+<div class="scholar-metrics">
 
+<p>
+Google Scholar
+</a>
+&nbsp;|&nbsp;
+<b>h-index:</b> 24
+&nbsp;|&nbsp;
+<b>i10-index:</b> 36
+&nbsp;|&nbsp;
+<b>Citations:</b> 2882
+</p>
+
+<p style="font-size:0.9em; opacity:0.7;">
+Metrics last updated: <span id="update-date"></span>
+</p>
+
+<script>
+document.getElementById("update-date").innerText =
+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long'});
+</script>
+
+</div>
+    
 <div id="pub-list">Loading publications...</div>
 
 <script>
 
 const orcid = "0000-0002-3101-2587";
 
-fetch("https://pub.orcid.org/v3.0/" + orcid + "/works", {
-headers: { "Accept": "application/json" }
-})
-.then(response => response.json())
-.then(data => {
+async function loadPublications(){
 
-let works = data.group;
+const orcidData = await fetch(
+"https://pub.orcid.org/v3.0/" + orcid + "/works",
+{ headers: { "Accept": "application/json" } }
+).then(r => r.json());
+
 let html = "<ol>";
 
-works.forEach(work => {
+for(const group of orcidData.group){
 
-let title = work["work-summary"][0].title.title.value;
+let summary = group["work-summary"][0];
+let title = summary.title.title.value;
+let year = summary["publication-date"]?.year?.value || "";
 
+let doi = "";
+if(summary["external-ids"]){
+for(const id of summary["external-ids"]["external-id"]){
+if(id["external-id-type"] === "doi"){
+doi = id["external-id-value"];
+}
+}
+}
+
+let authors = "";
 let journal = "";
-if(work["work-summary"][0]["journal-title"])
-journal = work["work-summary"][0]["journal-title"].value;
 
-let year = "";
-if(work["work-summary"][0]["publication-date"])
-year = work["work-summary"][0]["publication-date"].year.value;
+if(doi){
 
-html += `<li><b>${title}</b><br>${journal} (${year})</li>`;
+try{
 
-});
+const crossref = await fetch(
+"https://api.crossref.org/works/" + doi
+).then(r => r.json());
+
+journal = crossref.message["container-title"]?.[0] || "";
+
+authors = crossref.message.author
+.map(a => a.family + " " + (a.given || ""))
+.join(", ");
+
+}catch(e){}
+
+}
+
+html += `
+<li>
+<b>${title}</b><br>
+${authors}<br>
+<i>${journal}</i> (${year})<br>
+${doi ? `<a href="https://doi.org/${doi}" target="_blank">DOI</a>` : ""}
+</li>
+`;
+
+}
 
 html += "</ol>";
 
 document.getElementById("pub-list").innerHTML = html;
 
-})
-.catch(err => {
+}
 
-document.getElementById("pub-list").innerHTML =
-"Could not load publications from ORCID.";
-
-});
+loadPublications();
 
 </script>
 
