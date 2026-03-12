@@ -144,45 +144,61 @@ topological phases, and quantum transport.
 
 </div>
     </section>
-
 <section id="publications">
-  <h2>Publications</h2>
-  <div id="scholar-list">Loading publications...</div>
 
-  <script>
-    const scholarID = "cLj6i8AAAAAJ";
-    const url =
-      "https://api.allorigins.win/raw?url=" +
-      encodeURIComponent(
-        "https://scholar.google.com/citations?user=" +
-        scholarID +
-        "&hl=en&view_op=list_works&sortby=pubdate&output=rss"
-      );
+<h2>Publications</h2>
 
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        return response.text();
-      })
-      .then((str) => new window.DOMParser().parseFromString(str, "text/xml"))
-      .then((data) => {
-        const items = data.querySelectorAll("item");
-        if (!items.length) throw new Error("No publications returned");
+<p>
+<a href="https://scholar.google.com/citations?user=cLj6i8AAAAAJ" target="_blank">
+View full publication list on Google Scholar
+</a>
+</p>
 
-        let html = "<ol>";
-        items.forEach((el, i) => {
-          if (i < 100) {
-            html += `<li>${el.querySelector("title")?.textContent || "Untitled"}</li>`;
-          }
-        });
-        html += "</ol>";
-        document.getElementById("scholar-list").innerHTML = html;
-      })
-      .catch((err) => {
-        document.getElementById("scholar-list").innerHTML =
-          "Could not load Google Scholar publications: " + err.message;
-      });
-  </script>
+<div id="pub-list">Loading publications...</div>
+
+<script>
+
+const orcid = "0000-0002-3101-2587";
+
+fetch("https://pub.orcid.org/v3.0/" + orcid + "/works", {
+headers: { "Accept": "application/json" }
+})
+.then(response => response.json())
+.then(data => {
+
+let works = data.group;
+let html = "<ol>";
+
+works.forEach(work => {
+
+let title = work["work-summary"][0].title.title.value;
+
+let journal = "";
+if(work["work-summary"][0]["journal-title"])
+journal = work["work-summary"][0]["journal-title"].value;
+
+let year = "";
+if(work["work-summary"][0]["publication-date"])
+year = work["work-summary"][0]["publication-date"].year.value;
+
+html += `<li><b>${title}</b><br>${journal} (${year})</li>`;
+
+});
+
+html += "</ol>";
+
+document.getElementById("pub-list").innerHTML = html;
+
+})
+.catch(err => {
+
+document.getElementById("pub-list").innerHTML =
+"Could not load publications from ORCID.";
+
+});
+
+</script>
+
 </section>
    
 <section id="devices">
