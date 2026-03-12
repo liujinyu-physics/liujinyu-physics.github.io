@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jinyu Liu | Quantum Materials</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#ffffff;
+--text:#111;
+--accent:#0a5bd8;
+--card:#f6f7fb;
+}
+
+.dark{
+--bg:#0e1116;
+--text:#e6e6e6;
+--accent:#4da3ff;
+--card:#1a1f27;
+}
+
+body{
+margin:0;
+font-family:Inter, sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+header{
+padding:30px 10%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+nav a{
+margin-left:18px;
+text-decoration:none;
+color:var(--text);
+}
+
+.hero{
+padding:60px 10%;
+max-width:900px;
+}
+
+section{
+padding:60px 10%;
+max-width:1200px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:6px;
+background:var(--accent);
+color:white;
+cursor:pointer;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+}
+
+.item{
+background:var(--card);
+padding:14px;
+border-radius:10px;
+}
+
+.item img{
+width:100%;
+border-radius:8px;
+cursor:pointer;
+}
+
+.caption{
+margin-top:8px;
+font-size:14px;
+}
+
+.lightbox{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+}
+
+.lightbox img{
+max-width:90%;
+max-height:90%;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<b>Jinyu Liu</b>
+
+<nav>
+<a href="#devices">Devices</a>
+<a href="#crystals">Crystal Growth</a>
+<a href="#contact">Contact</a>
+</nav>
+
+<button onclick="toggleDark()">Dark Mode</button>
+
+</header>
+
+<div class="hero">
+
+<h1>Jinyu Liu</h1>
+
+<p>
+Condensed matter physicist studying quantum materials, excitonic insulators,
+topological phases, and quantum transport.
+</p>
+
+<a href="cv.pdf" download>
+<button>Download CV</button>
+</a>
+
+</div>
+
+
+<section id="devices">
+
+<h2>Devices Gallery</h2>
+
+<div class="gallery" id="devices-gallery"></div>
+
+</section>
+
+
+<section id="crystals">
+
+<h2>Crystal Growth Gallery</h2>
+
+<div class="gallery" id="crystals-gallery"></div>
+
+</section>
+
+
+<section id="contact">
+
+<h2>Contact</h2>
+
+<div class="card">
+
+Department of Physics and Astronomy<br>
+University of California, Irvine<br><br>
+
+Email: your_email@uci.edu
+
+</div>
+
+</section>
+
+
+<div class="lightbox" id="lightbox" onclick="closeImg()">
+<img id="lightbox-img">
+</div>
+
+
+<script>
+
+function toggleDark(){
+document.body.classList.toggle("dark")
+}
+
+function openImg(src){
+let box=document.getElementById("lightbox")
+let img=document.getElementById("lightbox-img")
+
+box.style.display="flex"
+img.src=src
+}
+
+function closeImg(){
+document.getElementById("lightbox").style.display="none"
+}
+
+
+/* ================================
+   EDIT YOUR DEVICES HERE
+   ================================ */
+
+const devices=[
+
+{
+name:"Spin‑triplet EI transport device",
+material:"HfTe5",
+year:"2025",
+image:"devices/device1.jpg"
+},
+
+{
+name:"Quantum transport nanodevice",
+material:"ZrTe5",
+year:"2024",
+image:"devices/device2.jpg"
+}
+
+]
+
+
+/* ================================
+   EDIT YOUR CRYSTALS HERE
+   ================================ */
+
+const crystals=[
+
+{
+name:"HfTe5 single crystal",
+method:"Flux growth",
+year:"2024",
+image:"crystals/crystal1.jpg"
+},
+
+{
+name:"Isotope engineered HfTe5 crystal",
+method:"Isotope crystal growth",
+year:"2025",
+image:"crystals/crystal2.jpg"
+}
+
+]
+
+
+/* ================================
+   AUTO GENERATE DEVICE GALLERY
+   ================================ */
+
+const deviceContainer=document.getElementById("devices-gallery")
+
+devices.forEach(d=>{
+
+let el=document.createElement("div")
+el.className="item"
+
+el.innerHTML=`
+<img src="${d.image}" onclick="openImg('${d.image}')">
+<div class="caption">
+<b>${d.name}</b><br>
+Material: ${d.material}<br>
+Year: ${d.year}
+</div>
+`
+
+deviceContainer.appendChild(el)
+
+})
+
+
+/* ================================
+   AUTO GENERATE CRYSTAL GALLERY
+   ================================ */
+
+const crystalContainer=document.getElementById("crystals-gallery")
+
+crystals.forEach(c=>{
+
+let el=document.createElement("div")
+el.className="item"
+
+el.innerHTML=`
+<img src="${c.image}" onclick="openImg('${c.image}')">
+<div class="caption">
+<b>${c.name}</b><br>
+Method: ${c.method}<br>
+Year: ${c.year}
+</div>
+`
+
+crystalContainer.appendChild(el)
+
+})
+
+
+</script>
+
+</body>
+</html>
