@@ -120,6 +120,7 @@ max-height:90%;
 <b>Jinyu Liu</b>
 
 <nav>
+<a href="#publications">Publications</a>
 <a href="#devices">Devices</a>
 <a href="#crystals">Crystal Growth</a>
 <a href="#contact">Contact</a>
@@ -142,7 +143,10 @@ topological phases, and quantum transport.
 </a>
 
 </div>
-    <section id="Publications">
+    </section>
+
+<section id="publications">
+
 <h2>Publications</h2>
 
 <div id="scholar-list">Loading publications...</div>
@@ -178,10 +182,6 @@ html += "<p>" + el.querySelector("title").textContent + "</p>";
 
 document.getElementById("scholar-list").innerHTML = html;
 
-})
-.catch(err => {
-document.getElementById("scholar-list").innerHTML =
-"Could not load publications.";
 });
 
 </script>
